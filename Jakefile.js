@@ -12,7 +12,7 @@ To run the tests, run "jake test".
 For a custom build, open build/build.html in the browser and follow the instructions.
 */
 
-var build = require('./build/build.js');
+let build = require('./build/build.js');
 
 desc('Check Leaflet.pattern source for errors with JSHint');
 task('lint', build.lint);

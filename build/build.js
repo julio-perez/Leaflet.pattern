@@ -1,4 +1,4 @@
-var fs = require('fs'),
+let fs = require('fs'),
     jshint = require('jshint'),
     UglifyJS = require('uglify-js'),
 
@@ -7,7 +7,7 @@ var fs = require('fs'),
 
 function lintFiles(files) {
 
-	var errorsFound = 0,
+	let errorsFound = 0,
 	    i, j, len, len2, src, errors, e;
 
 	for (i = 0, len = files.length; i < len; i++) {
@@ -27,7 +27,7 @@ function lintFiles(files) {
 }
 
 function getFiles(compsBase32) {
-	var memo = {},
+	let memo = {},
 	    comps;
 
 	if (compsBase32) {
@@ -36,12 +36,12 @@ function getFiles(compsBase32) {
 	}
 
 	function addFiles(srcs) {
-		for (var j = 0, len = srcs.length; j < len; j++) {
+		for (let j = 0, len = srcs.length; j < len; j++) {
 			memo[srcs[j]] = true;
 		}
 	}
 
-	for (var i in deps) {
+	for (let i in deps) {
 		if (comps) {
 			if (parseInt(comps.pop(), 2) === 1) {
 				console.log('\t* ' + i);
@@ -54,9 +54,9 @@ function getFiles(compsBase32) {
 		}
 	}
 
-	var files = [];
+	let files = [];
 
-	for (var src in memo) {
+	for (let src in memo) {
 		files.push('src/' + src);
 	}
 
@@ -67,11 +67,11 @@ exports.getFiles = getFiles;
 
 exports.lint = function () {
 
-	var files = getFiles();
+	let files = getFiles();
 
 	console.log('Checking for JS errors...');
 
-	var errorsFound = lintFiles(files);
+	let errorsFound = lintFiles(files);
 
 	if (errorsFound > 0) {
 		console.log(errorsFound + ' error(s) found.\n');
@@ -86,7 +86,7 @@ function getSizeDelta(newContent, oldContent) {
 	if (!oldContent) {
 		return 'new';
 	}
-	var newLen = newContent.replace(/\r\n?/g, '\n').length,
+	let newLen = newContent.replace(/\r\n?/g, '\n').length,
 		oldLen = oldContent.replace(/\r\n?/g, '\n').length,
 		delta = newLen - oldLen;
 
@@ -102,8 +102,8 @@ function loadSilently(path) {
 }
 
 function combineFiles(files) {
-	var content = '';
-	for (var i = 0, len = files.length; i < len; i++) {
+	let content = '';
+	for (let i = 0, len = files.length; i < len; i++) {
 		content += fs.readFileSync(files[i], 'utf8') + '\n\n';
 	}
 	return content;
@@ -111,11 +111,11 @@ function combineFiles(files) {
 
 exports.build = function (compsBase32, buildName) {
 
-	var files = getFiles(compsBase32);
+	let files = getFiles(compsBase32);
 
 	console.log('Concatenating ' + files.length + ' files...');
 
-	var copy = fs.readFileSync('src/copyright.js', 'utf8'),
+	let copy = fs.readFileSync('src/copyright.js', 'utf8'),
 	    intro = '(function (window, document, undefined) {',
 	    outro = '}(window, document));',
 	    newSrc = copy + intro + combineFiles(files) + outro,
@@ -137,7 +137,7 @@ exports.build = function (compsBase32, buildName) {
 
 	console.log('Compressing...');
 
-	var path = pathPart + '.js',
+	let path = pathPart + '.js',
 	    oldCompressed = loadSilently(path),
 	    newCompressed = copy + UglifyJS.minify(newSrc, {
 	        warnings: true,
@@ -156,7 +156,7 @@ exports.build = function (compsBase32, buildName) {
 };
 
 exports.test = function() {
-	var karma = require('karma'),
+	let karma = require('karma'),
 	    testConfig = {configFile : __dirname + '/../spec/karma.conf.js'};
 
 	testConfig.browsers = ['PhantomJS'];

@@ -1,4 +1,4 @@
-var deps = {
+let deps = {
 
 	Pattern: {
 		src: ['Pattern.js',
